@@ -1,13 +1,12 @@
-package domain;
+package ro.ubb.catalog.domain;
 
 
-public class Client extends Entity {
+public class Client extends BaseEntity<Long> {
     private String firstName;
     private String lastName;
     private String phoneNumber;
 
-    public Client(int clientId, String firstName, String lastName, String phoneNumber ) {
-        super(clientId);
+    public Client(String firstName, String lastName, String phoneNumber ) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -35,6 +34,24 @@ public class Client extends Entity {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Client client = (Client) o;
+        if (!firstName.equals(client.firstName)) return false;
+        if (!lastName.equals(client.lastName)) return false;
+        return phoneNumber.equals(client.phoneNumber);
+    }
+
+    public int hashCode() {
+        int result = firstName.hashCode();
+        result = 31 * result + lastName.hashCode();
+        result = 31 * result + phoneNumber.hashCode();
+        return result;
     }
 
     @Override

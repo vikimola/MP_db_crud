@@ -1,6 +1,6 @@
-package domain.validators;
+package ro.ubb.catalog.domain.validators;
 
-import domain.Book;
+import ro.ubb.catalog.domain.Book;
 
 public class BookValidator implements Validator<Book> {
     public void validate(Book book) throws ValidatorException{

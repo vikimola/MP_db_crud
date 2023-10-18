@@ -1,6 +1,6 @@
-package domain.validators;
+package ro.ubb.catalog.domain.validators;
 
-import domain.Client;
+import ro.ubb.catalog.domain.Client;
 
 public class ClientValidator {
     public void validate(Client client) throws ValidatorException{

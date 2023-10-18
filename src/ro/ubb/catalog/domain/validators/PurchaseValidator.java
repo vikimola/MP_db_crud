@@ -1,6 +1,6 @@
-package domain.validators;
+package ro.ubb.catalog.domain.validators;
 
-import domain.Purchase;
+import ro.ubb.catalog.domain.Purchase;
 
 import java.time.LocalDate;
 
