@@ -2,7 +2,7 @@ package ro.ubb.catalog.domain.validators;
 
 import ro.ubb.catalog.domain.Client;
 
-public class ClientValidator {
+public class ClientValidator implements Validator<Client>{
     public void validate(Client client) throws ValidatorException{
         if(client.getId() <0){
             throw new ValidatorException("Client ID must  not be negative.");

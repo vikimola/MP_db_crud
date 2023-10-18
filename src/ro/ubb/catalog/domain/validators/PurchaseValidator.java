@@ -5,7 +5,7 @@ import ro.ubb.catalog.domain.Purchase;
 import java.time.LocalDate;
 
 
-public class PurchaseValidator {
+public class PurchaseValidator implements Validator<Purchase>{
     public void validate(Purchase purchase) throws ValidatorException{
         if(purchase.getId() < 0){
             throw new ValidatorException("Purchase ID must  not be negative.");
