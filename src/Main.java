@@ -3,8 +3,6 @@ import ro.ubb.catalog.Service.ClientService;
 import ro.ubb.catalog.Service.PurchaseService;
 import ro.ubb.catalog.UserInterface.Console;
 import ro.ubb.catalog.domain.Book;
-import ro.ubb.catalog.domain.Client;
-import ro.ubb.catalog.domain.Purchase;
 import ro.ubb.catalog.domain.validators.BookValidator;
 import ro.ubb.catalog.domain.validators.ClientValidator;
 import ro.ubb.catalog.domain.validators.PurchaseValidator;

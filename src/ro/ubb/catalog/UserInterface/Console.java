@@ -1,12 +1,10 @@
 package ro.ubb.catalog.UserInterface;
-
 import ro.ubb.catalog.Service.BookService;
 import ro.ubb.catalog.Service.ClientService;
 import ro.ubb.catalog.Service.PurchaseService;
 import ro.ubb.catalog.domain.Book;
 import ro.ubb.catalog.domain.Client;
 import ro.ubb.catalog.domain.Purchase;
-
 import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Optional;
