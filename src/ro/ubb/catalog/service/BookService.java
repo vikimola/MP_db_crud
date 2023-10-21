@@ -1,9 +1,10 @@
-package ro.ubb.catalog.Service;
+package ro.ubb.catalog.service;
 
 import ro.ubb.catalog.domain.Book;
 import ro.ubb.catalog.domain.validators.ValidatorException;
 import ro.ubb.catalog.repository.BookFileRepository;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -18,6 +19,7 @@ public class BookService {
         book.setId(newId);
         this.bookFileRepository.save(book);
     }
+
     public Set<Book> getAllBooks() throws ValidatorException{
         Set<Book> books = new HashSet<>();
         bookFileRepository.findAll().forEach(books::add);
@@ -32,6 +34,7 @@ public class BookService {
         }
     public Optional<Book> updateBook(Book book) throws ValidatorException{
         return bookFileRepository.update(book);
+
     }
 
     public Long findHighestExistingId() {

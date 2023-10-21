@@ -1,10 +1,9 @@
-package ro.ubb.catalog.UserInterface;
-import ro.ubb.catalog.Service.BookService;
-import ro.ubb.catalog.Service.ClientService;
-import ro.ubb.catalog.Service.PurchaseService;
-import ro.ubb.catalog.domain.Book;
-import ro.ubb.catalog.domain.Client;
-import ro.ubb.catalog.domain.Purchase;
+package ro.ubb.catalog.userInterface;
+import ro.ubb.catalog.domain.*;
+import ro.ubb.catalog.service.BookService;
+import ro.ubb.catalog.service.ClientService;
+import ro.ubb.catalog.service.PurchaseService;
+
 import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Optional;
@@ -15,7 +14,7 @@ public class Console {
     private ClientService clientService;
     private BookService bookService;
     private PurchaseService purchaseService;
-    public static void print(String string){
+    private static void print(String string){
         System.out.println(string);
     }
     public Console(ClientService clientService, BookService bookService,
@@ -25,13 +24,13 @@ public class Console {
         this.purchaseService=purchaseService;
         this.scanner=new Scanner(System.in);
     }
-    public static void menu(){
+    private static void menu(){
         print("1. Operations for Books");
         print("2. Operations for the Clients");
         print("3. Operations for the Purchases");
         print("4. See Profitability of Books");
         print("5. See Client Spending");
-        print("6. Get all available books");
+        //print("6. Get all available books");
         print("0. Exit \n");
     }
     public void runConsole() throws Exception {
@@ -42,9 +41,9 @@ public class Console {
                 case 1 -> handleBookSubmenu();
                 case 2 -> handleClientSubmenu();
                 case 3 -> handlePurchases();
-                //case 4 -> handleBookProfitability();
-                //case 5 -> handleClientSpending();
-                case 6 -> bookService.getAllBooks();
+                case 4 -> handleBookProfitability();
+                case 5 -> handleClientSpending();
+                //case 6 -> bookService.getAllBooks();
                 case 0 -> {
                     return;
                 }
@@ -53,6 +52,21 @@ public class Console {
 
         }
     }
+
+    private void handleBookProfitability() {
+        for (BookProfitabilityDTO profit : purchaseService.getBookProfitability()) {
+            System.out.println(profit);
+        }
+        System.out.println("\n");
+    }
+
+    private void handleClientSpending() {
+        for (ClientSpendingDTO amount : purchaseService.getClientSpending()) {
+            System.out.println(amount);
+        }
+        System.out.println("\n");
+    }
+
     private void handlePurchases() throws Exception {
         while (true) {
             print("1. Add a new purchase ");
@@ -154,7 +168,7 @@ public class Console {
 
         }
     }
-    public void handleBookSubmenu() {
+    private void handleBookSubmenu() {
         while (true) {
             print("1. Add a new book ");
             print("2. Update a book ");
@@ -214,6 +228,7 @@ public class Console {
 
     public void handleAddBook() {
         try {
+
             print("Enter Book Title: ");
             String title = scanner.next();
             print("Enter Book Author: ");
@@ -236,8 +251,10 @@ public class Console {
         }
     }
 
-    public void handleUpdateBook() {
+    private void handleUpdateBook() {
         try {
+            print("Enter Book Id: ");
+            long bookId= scanner.nextLong();
             print("Enter Book Title: ");
             String title = scanner.next();
             print("Enter Book Author: ");
@@ -248,15 +265,16 @@ public class Console {
             double price = scanner.nextDouble();
             print("Availability: ");
             int stock = scanner.nextInt();
-            Book book = new Book(title, author, publisher, price, stock);
-            this.bookService.updateBook(book);
+            Book book = new Book(title, author, publisher,price,stock);
+
+            handleUpdateBook();
             print("Book Update Completed!\n");
         } catch (Exception exception) {
             print("Error during update!\n");
         }
     }
 
-    public void handleClientSubmenu() {
+    private void handleClientSubmenu() {
         while (true) {
             print("1. Add a new client ");
             print("2. Update a client ");
@@ -318,6 +336,8 @@ public class Console {
 
     private void handleUpdateClient() {
         try {
+            print("Add Client Id!: ");
+            long id = scanner.nextLong();
             print("Enter Client First Name: ");
             String firstName = scanner.next();
 
@@ -337,7 +357,7 @@ public class Console {
 
     private void handleAddClient() {
         try {
-           
+
             print("Enter First Name: ");
             String firstName = scanner.next();
 
@@ -358,8 +378,4 @@ public class Console {
 
         }
     }
-
-
-
-
 }

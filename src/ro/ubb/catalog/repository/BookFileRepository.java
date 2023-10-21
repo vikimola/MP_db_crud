@@ -6,6 +6,7 @@ import ro.ubb.catalog.domain.validators.ValidatorException;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,7 +31,7 @@ public class BookFileRepository extends InMemoryRepository<Long, Book> {
         Path path = Paths.get(fileName);
 
         try {
-            Files.lines(path).forEach(line -> {
+            Files.lines(path, StandardCharsets.UTF_8).forEach(line -> {
                 List<String> items = Arrays.asList(line.split(","));
 
                 Long id = Long.valueOf(items.get(0));

@@ -6,6 +6,7 @@ import ro.ubb.catalog.domain.validators.ValidatorException;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,13 +32,13 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
         Path path = Paths.get(fileName);
 
         try {
-            Files.lines(path).forEach(line -> {
+            Files.lines(path, StandardCharsets.UTF_8).forEach(line -> {
                 List<String> items = Arrays.asList(line.split(","));
 
                 Long id = Long.valueOf(items.get(0));
                 String firstName = items.get(1);
                 String lastName = items.get((2));
-                String phoneNumber = items.get((2));
+                String phoneNumber = items.get((3));
 
                 Client client = new Client(firstName, lastName, phoneNumber);
                 client.setId(id);

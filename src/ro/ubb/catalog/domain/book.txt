@@ -1,0 +1,13 @@
+1,Title1,Author1,Publisher1,45,4
+2,Title2,Author2,Publisher2,46,14
+3,Title3,Author3,Publisher3,47,12
+4,Title4,Author4,Publisher4,48,9
+5,Title5,Author5,Publisher5,49,10
+6,Title6,Author6,Publisher1,50,9
+7,Title7,Author7,Publisher4,51,7
+8,Title8,Author8,Publisher5,52,23
+9,title9,Author2,Publisher3,78.0,16
+10,Boom,Shaka,Laka,23.0,50
+11,Title12,Author12,Publisher12,12.0,25
+12,Boomboom,Shakashaka,Laka,56.0,8
+13,anotherone,anotherauthor,anotherpublisher,344.0,8
