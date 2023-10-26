@@ -4,10 +4,7 @@ import ro.ubb.catalog.domain.BaseEntity;
 import ro.ubb.catalog.domain.validators.Validator;
 import ro.ubb.catalog.domain.validators.ValidatorException;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -33,8 +30,9 @@ public class InMemoryRepository<ID, T extends BaseEntity<ID>> implements Reposit
 
     @Override
     public Iterable<T> findAll() {
-        Set<T> allEntities = entities.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toSet());
-        return allEntities;
+//        Set<T> allEntities = entities.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toSet());
+//        return allEntities;
+        return new HashSet<>(entities.values());
     }
 
     @Override

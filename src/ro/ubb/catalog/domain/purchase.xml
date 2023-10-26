@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<purchases>
+    <purchase id="1">
+        <bookId>1</bookId>
+        <clientId>1</clientId>
+        <numberSold>3</numberSold>
+        <dateOfPurchase>2023-05-29</dateOfPurchase>
+    </purchase>
+    <purchase id="2">
+        <bookId>1</bookId>
+        <clientId>2</clientId>
+        <numberSold>3</numberSold>
+        <dateOfPurchase>2023-08-19</dateOfPurchase>
+    </purchase>
+    <purchase id="3">
+        <bookId>2</bookId>
+        <clientId>2</clientId>
+        <numberSold>5</numberSold>
+        <dateOfPurchase>2022-10-29</dateOfPurchase>
+    </purchase>
+    <purchase id="4">
+        <bookId>3</bookId>
+        <clientId>1</clientId>
+        <numberSold>1</numberSold>
+        <dateOfPurchase>2023-03-30</dateOfPurchase>
+    </purchase>
+    <purchase id="5">
+        <bookId>3</bookId>
+        <clientId>1</clientId>
+        <numberSold>2</numberSold>
+        <dateOfPurchase>2023-11-29</dateOfPurchase>
+    </purchase>
+
+</purchases>

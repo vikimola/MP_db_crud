@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<books>
+<book id="1">
+    <title>Everyday Italian</title>
+    <author>Giada De Laurentius</author>
+    <publisher>Asd1</publisher>
+    <price>30.00</price>
+    <stock>300</stock>
+</book>
+<book id="2">
+    <title>Everyday Italian 2</title>
+    <author>Giada De Laurentius</author>
+    <publisher>Asd1</publisher>
+    <price>35.00</price>
+    <stock>240</stock>
+</book>
+<book id="3">
+    <title>Everyday Italian 3</title>
+    <author>Giada De Laurentius</author>
+    <publisher>Asd1</publisher>
+    <price>45.00</price>
+    <stock>356</stock>
+</book>
+</books>

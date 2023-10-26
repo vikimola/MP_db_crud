@@ -6,7 +6,8 @@ public class Client extends BaseEntity<Long> {
     private String lastName;
     private String phoneNumber;
 
-    public Client(String firstName, String lastName, String phoneNumber ) {
+    public Client(Long id, String firstName, String lastName, String phoneNumber) {
+        super(id);
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;

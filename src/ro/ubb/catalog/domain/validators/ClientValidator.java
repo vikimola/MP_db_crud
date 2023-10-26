@@ -1,6 +1,8 @@
 package ro.ubb.catalog.domain.validators;
 
 import ro.ubb.catalog.domain.Client;
+import ro.ubb.catalog.domain.Purchase;
+import ro.ubb.catalog.repository.Repository;
 
 public class ClientValidator implements Validator<Client>{
     public void validate(Client client) throws ValidatorException{
@@ -18,8 +20,16 @@ public class ClientValidator implements Validator<Client>{
         if(client.getPhoneNumber().isEmpty()){
             throw new ValidatorException("Phone number must not be empty.");
         }
+        if(client.getPhoneNumber().length()<10){
+            throw new ValidatorException("Phone number must be at least 10 digits.");
+        }
 
 
+
+    }
+
+    @Override
+    public void validate(Purchase purchase, Repository repository) throws ValidatorException {
 
     }
 }

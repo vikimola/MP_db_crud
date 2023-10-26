@@ -11,3 +11,15 @@
 11,Title12,Author12,Publisher12,12.0,25
 12,Boomboom,Shakashaka,Laka,56.0,8
 13,anotherone,anotherauthor,anotherpublisher,344.0,8
+14," ",sdf,fr,43.0,5
+15,"",d,d,45.0,546
+16,'',"",fdg,234.0,543
+17,"",gsdf,dsfg,456.0,675
+18,'',"",sdfa,342.0,43
+19,"","","",5.0,45
+20,"",'',"",435.0,453
+21,',',',567.0,5674
+22,",",fghn,5674.0,7456
+23,ytrg,tyr,rty,564.0,546
+24,hg,fhgd,fghd,111.0,111
+34,dfs,dfs,dfs,23.0,2

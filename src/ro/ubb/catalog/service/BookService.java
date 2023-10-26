@@ -1,39 +1,41 @@
 package ro.ubb.catalog.service;
 
 import ro.ubb.catalog.domain.Book;
+import ro.ubb.catalog.domain.validators.BookValidator;
 import ro.ubb.catalog.domain.validators.ValidatorException;
 import ro.ubb.catalog.repository.BookFileRepository;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 public class BookService {
-    private BookFileRepository bookFileRepository;
-    public BookService(BookFileRepository bookFileRepository){
-        this.bookFileRepository=bookFileRepository;
+    private final BookFileRepository bookFileRepository;
+    private final BookValidator bookValidator;
+    public BookService(BookFileRepository bookFileRepository, BookValidator bookValidator) {
+        this.bookFileRepository = bookFileRepository;
+        this.bookValidator = bookValidator;
     }
     public void addBook(Book book) throws ValidatorException {
-        Long newId = findHighestExistingId() +1;
-        book.setId(newId);
+        this.bookValidator.validate(book);
         this.bookFileRepository.save(book);
     }
 
     public Set<Book> getAllBooks() throws ValidatorException{
         Set<Book> books = new HashSet<>();
-        bookFileRepository.findAll().forEach(books::add);
+        this.bookFileRepository.findAll().forEach(books::add);
+//        BookFileRepository.readBookXml();
         return books;
     }
     public Optional<Book> readOneBook(Long id) throws ValidatorException{
         return this.bookFileRepository.findOne(id);
     }
-    public Optional<Book> deleteOneBook(Long id){
-
-            return bookFileRepository.delete(id);
-        }
-    public Optional<Book> updateBook(Book book) throws ValidatorException{
-        return bookFileRepository.update(book);
+    public void deleteOneBook(Long id){
+        bookFileRepository.delete(id);
+    }
+    public void updateBook(Book book) throws ValidatorException{
+        this.bookValidator.validate(book);
+        this.bookFileRepository.update(book);
 
     }
 

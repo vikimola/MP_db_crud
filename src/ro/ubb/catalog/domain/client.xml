@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<clients>
+    <client id="1">
+        <firstName>Asd1</firstName>
+        <lastName>Asd1</lastName>
+        <phoneNumber>1234567890</phoneNumber>
+    </client>
+    <client id="2">
+        <firstName>Asd2</firstName>
+        <lastName>Asd2</lastName>
+        <phoneNumber>1234567891</phoneNumber>
+    </client>
+    <client id="3">
+        <firstName>Asd3</firstName>
+        <lastName>Asd3</lastName>
+        <phoneNumber>1234567892</phoneNumber>
+    </client>
+</clients>

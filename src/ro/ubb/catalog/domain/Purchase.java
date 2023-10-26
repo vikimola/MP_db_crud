@@ -9,7 +9,8 @@ public class Purchase extends BaseEntity<Long> {
     private int numberSold;
     private LocalDate dateOfPurchase;
 
-    public Purchase( long bookId, long clientId, int numberSold, LocalDate dateOfPurchase) {
+    public Purchase(long id, long bookId, long clientId, int numberSold, LocalDate dateOfPurchase) {
+        super(id);
         this.bookId = bookId;
         this.clientId = clientId;
         this.numberSold = numberSold;
@@ -60,6 +61,7 @@ public class Purchase extends BaseEntity<Long> {
     @Override
     public String toString() {
         return "Purchase{" +
+                "purchaseId=" + getId() +
                 "bookId=" + bookId +
                 ", clientId=" + clientId +
                 ", numberSold=" + numberSold +

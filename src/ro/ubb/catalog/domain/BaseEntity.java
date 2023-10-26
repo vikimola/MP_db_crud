@@ -3,6 +3,10 @@ package ro.ubb.catalog.domain;
 public class BaseEntity<ID> {
     private ID id;
 
+    public BaseEntity(ID id) {
+        this.id = id;
+    }
+
     public ID getId() {
         return id;
     }
@@ -10,6 +14,12 @@ public class BaseEntity<ID> {
     public void setId(ID id) {
         this.id = id;
     }
+
+
+
+
+
+
 
     @Override
     public String toString() {

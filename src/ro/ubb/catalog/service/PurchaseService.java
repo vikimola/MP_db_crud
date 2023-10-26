@@ -1,6 +1,7 @@
 package ro.ubb.catalog.service;
 
 import ro.ubb.catalog.domain.*;
+import ro.ubb.catalog.domain.validators.PurchaseValidator;
 import ro.ubb.catalog.domain.validators.ValidatorException;
 import ro.ubb.catalog.repository.BookFileRepository;
 import ro.ubb.catalog.repository.ClientFileRepository;
@@ -9,34 +10,37 @@ import ro.ubb.catalog.repository.PurchaseFileRepository;
 import java.util.*;
 
 public class PurchaseService {
-    private PurchaseFileRepository purchaseFileRepository;
-    private BookFileRepository bookFileRepository;
-    private ClientFileRepository clientFileRepository;
+    private final PurchaseFileRepository purchaseFileRepository;
+    private final BookFileRepository bookFileRepository;
+    private final ClientFileRepository clientFileRepository;
+    private final PurchaseValidator purchaseValidator;
     public PurchaseService(PurchaseFileRepository purchaseFileRepository, BookFileRepository
-                           bookFileRepository, ClientFileRepository clientFileRepository){
+                           bookFileRepository, ClientFileRepository clientFileRepository, PurchaseValidator purchaseValidator){
         this.purchaseFileRepository=purchaseFileRepository;
         this.bookFileRepository = bookFileRepository;
         this.clientFileRepository = clientFileRepository;
+        this.purchaseValidator = purchaseValidator;
     }
     public void addPurchase(Purchase purchase){
-        Long newId = findHighestExistingId() +1;
-        purchase.setId(newId);
+//        Long newId = findHighestExistingId() +1;
+//        purchase.setId(newId);
+        this.purchaseValidator.validate(purchase, bookFileRepository, clientFileRepository);
         this.purchaseFileRepository.save(purchase);
     }
 
-    private Long findHighestExistingId() {
-        Set<Purchase> purchases = getAllPurchases();
-        Long highestId = 0L;
-
-        for (Purchase purchase : purchases) {
-            Long purchaseId = purchase.getId();
-            if (purchaseId > highestId) {
-                highestId = purchaseId;
-            }
-        }
-
-        return highestId;
-    }
+//    private Long findHighestExistingId() {
+//        Set<Purchase> purchases = getAllPurchases();
+//        Long highestId = 0L;
+//
+//        for (Purchase purchase : purchases) {
+//            Long purchaseId = purchase.getId();
+//            if (purchaseId > highestId) {
+//                highestId = purchaseId;
+//            }
+//        }
+//
+//        return highestId;
+//    }
 
     public Set<Purchase> getAllPurchases(){
         Set<Purchase> purchases = new HashSet<>();
@@ -46,11 +50,12 @@ public class PurchaseService {
     public Optional<Purchase> readOnePurchase(Long id) throws ValidatorException {
         return this.purchaseFileRepository.findOne(id);
     }
-    public Optional<Purchase> deleteOnePurchase(Long id){
-        return purchaseFileRepository.delete(id);
+    public void deleteOnePurchase(Long id){
+        purchaseFileRepository.delete(id);
     }
-    public Optional<Purchase> updatePurchase(Purchase purchase) throws ValidatorException{
-        return purchaseFileRepository.update(purchase);
+    public void updatePurchase(Purchase purchase) throws ValidatorException{
+        this.purchaseValidator.validate(purchase, bookFileRepository, clientFileRepository);
+        this.purchaseFileRepository.update(purchase);
     }
     public List<BookProfitabilityDTO> getBookProfitability() {
         Iterable<Purchase> purchaseList = purchaseFileRepository.findAll();

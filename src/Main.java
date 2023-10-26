@@ -11,29 +11,27 @@ import ro.ubb.catalog.repository.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        String bookFilePath = "src/ro/ubb/catalog/domain/book.txt";
-        String clientFilePath = "src/ro/ubb/catalog/domain/client.txt";
-        String purchaseFilePath = "src/ro/ubb/catalog/domain/purchase.txt";
-        Validator<Book> bookValidator = new BookValidator();
+        String bookFilePath = "src/ro/ubb/catalog/domain/book.xml";
+        String clientFilePath = "src/ro/ubb/catalog/domain/client.xml";
+        String purchaseFilePath = "src/ro/ubb/catalog/domain/purchase.xml";
+
+
+        BookValidator bookValidator = new BookValidator();
+        BookFileRepository bookFileRepository = new BookFileRepository(bookValidator, bookFilePath);
+        BookService bookService = new BookService(bookFileRepository, bookValidator);
 
         ClientValidator clientValidator = new ClientValidator();
-        PurchaseValidator purchaseValidator = new PurchaseValidator();
-
-        BookFileRepository bookFileRepository = new BookFileRepository(bookValidator, bookFilePath);
-        BookService bookService = new BookService(bookFileRepository);
-
         ClientFileRepository clientFileRepository = new ClientFileRepository(clientValidator, clientFilePath);
-        ClientService clientService = new ClientService(clientFileRepository);
+        ClientService clientService = new ClientService(clientFileRepository, clientValidator);
 
+        PurchaseValidator purchaseValidator = new PurchaseValidator();
         PurchaseFileRepository purchaseFileRepository = new PurchaseFileRepository(purchaseValidator, purchaseFilePath);
-        PurchaseService purchaseService = new PurchaseService(purchaseFileRepository, bookFileRepository, clientFileRepository);
-
-
+        PurchaseService purchaseService = new PurchaseService(purchaseFileRepository, bookFileRepository, clientFileRepository, purchaseValidator);
 
         Console console=new Console(clientService, bookService, purchaseService);
-
         console.runConsole();
 
-        System.out.println("Bye");
         }
     }
+
+

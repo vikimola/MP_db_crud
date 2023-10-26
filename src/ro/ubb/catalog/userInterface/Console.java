@@ -1,9 +1,13 @@
 package ro.ubb.catalog.userInterface;
 import ro.ubb.catalog.domain.*;
+import ro.ubb.catalog.domain.validators.ValidatorException;
 import ro.ubb.catalog.service.BookService;
 import ro.ubb.catalog.service.ClientService;
 import ro.ubb.catalog.service.PurchaseService;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Optional;
@@ -118,23 +122,28 @@ public class Console {
         this.purchaseService.deleteOnePurchase(id);
         print("Purchase deleted.\n ");
     }
+    private Purchase getPurchasedata() {
+        InputStreamReader isr = new InputStreamReader(System.in);
+        BufferedReader br = new BufferedReader(isr);
+        print("Enter Id");
+        long id = scanner.nextLong();
+        print("Enter Book Id");
+        long bookId = scanner.nextLong();
+        print("Enter the Client Id: ");
+        long clientId = scanner.nextLong();
+        print("Enter number of books sold: ");
+        int numberSold = scanner.nextInt();
+        print("Give me the date of Purchase: ");
+        LocalDate dateOfPurchase = LocalDate.parse(scanner.next());
+        return new Purchase(id, bookId, clientId, numberSold, dateOfPurchase);
+
+    }
+
     private void handleUpdatePurchase() {
 
         try {
-            print("Enter Book Id");
-            long id = scanner.nextLong();
-
-            print("Enter the Client Id: ");
-            long clientId = scanner.nextLong();
-
-            print("Enter number of books sold: ");
-            int numberSold = scanner.nextInt();
-
-            print("Give me the date of Purchase: ");
-            LocalDate dateOfPurchase = LocalDate.parse(scanner.next());
-
-            Purchase p = new Purchase(id, clientId, numberSold, dateOfPurchase);
-            this.purchaseService.updatePurchase(p);
+            Purchase purchase = getPurchasedata();
+            this.purchaseService.updatePurchase(purchase);
             print("Purchase Update Completed!\n");
         } catch (Exception exception) {
             print("Error during update!\n");
@@ -144,20 +153,9 @@ public class Console {
     }
     private void handleAddPurchase() {
         try {
-            print("Enter Book Id");
-            long bookId = scanner.nextLong();
-
-            print("Enter Client Id: ");
-            long clientId = scanner.nextLong();
-
-            print("Enter number sold: ");
-            int numberSold = scanner.nextInt();
-
-            print("Date Of Purchase: ");
-            LocalDate dateOfPurchase = LocalDate.parse(scanner.next());
-
-            Purchase p = new Purchase(bookId, clientId, numberSold, dateOfPurchase);
-            this.purchaseService.addPurchase(p);
+            Purchase purchase = getPurchasedata();
+            this.purchaseService.addPurchase(purchase);
+            print("Added purchase!\n");
         } catch (InputMismatchException ime) {
             print("Wrong data type entered!\n");
             scanner.next();
@@ -213,6 +211,7 @@ public class Console {
         }
 
     }
+
     private void handleDeleteBook() {
         try {
             print("Enter Book Id you want to delete: ");
@@ -226,21 +225,31 @@ public class Console {
         }
     }
 
+    public Book getBookdata() throws IOException {
+        InputStreamReader isr = new InputStreamReader(System.in);
+        BufferedReader br = new BufferedReader(isr);
+
+        print("Enter Book Id: ");
+        Long id = scanner.nextLong();
+        print("Enter Book Title: ");
+        String title = br.readLine();
+        print("Enter Book Author: ");
+        String author = br.readLine();
+        print("Enter publisher: ");
+        String publisher = br.readLine();
+        print("Enter the Price: ");
+        double price = scanner.nextDouble();
+        print("Enter the Stock: ");
+        int stock = scanner.nextInt();
+
+        return new Book(id, title, author, publisher, price, stock);
+    }
+
     public void handleAddBook() {
         try {
-
-            print("Enter Book Title: ");
-            String title = scanner.next();
-            print("Enter Book Author: ");
-            String author = scanner.next();
-            print("Enter publisher: ");
-            String publisher = scanner.next();
-            print("Enter the Price: ");
-            double price = scanner.nextDouble();
-            print("Availability: ");
-            int stock = scanner.nextInt();
-            Book book = new Book(title, author, publisher, price, stock);
+            Book book = getBookdata();
             this.bookService.addBook(book);
+            print("Book added!\n");
         } catch (InputMismatchException ime) {
             print("Wrong data type entered!\n");
             scanner.next();
@@ -251,23 +260,24 @@ public class Console {
         }
     }
 
+//    private void handleAddBook() {
+//        while (true) {
+//            Book student = readStudent();
+//            if (student == null || student.getId() < 0) {
+//                break;
+//            }
+//            try {
+//                studentService.addStudent(student);
+//            } catch (ValidatorException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
     private void handleUpdateBook() {
         try {
-            print("Enter Book Id: ");
-            long bookId= scanner.nextLong();
-            print("Enter Book Title: ");
-            String title = scanner.next();
-            print("Enter Book Author: ");
-            String author = scanner.next();
-            print("Enter publisher: ");
-            String publisher = scanner.next();
-            print("Enter the Price: ");
-            double price = scanner.nextDouble();
-            print("Availability: ");
-            int stock = scanner.nextInt();
-            Book book = new Book(title, author, publisher,price,stock);
-
-            handleUpdateBook();
+            Book book = getBookdata();
+            bookService.updateBook(book);
             print("Book Update Completed!\n");
         } catch (Exception exception) {
             print("Error during update!\n");
@@ -314,7 +324,7 @@ public class Console {
         print("Enter Client Id");
         Long id = scanner.nextLong();
         Optional<Client> client = this.clientService.readOneClient(id);
-        if (client == null) {
+        if (client.isEmpty()) {
             print("Couldn't find the client with the given ID!\n");
         } else {
             System.out.println(client);
@@ -334,19 +344,24 @@ public class Console {
         }
     }
 
+    public Client getClientData() {
+        InputStreamReader isr = new InputStreamReader(System.in);
+        BufferedReader br = new BufferedReader(isr);
+        print("Add Client Id!: ");
+        long id = scanner.nextLong();
+        print("Enter Client First Name: ");
+        String firstName = scanner.next();
+        print("Enter Client Last Name: ");
+        String lastName = scanner.next();
+        print("Enter client phone number: ");
+        String phoneNumber = scanner.next();
+
+        return new Client(id, firstName, lastName, phoneNumber);
+    }
+
     private void handleUpdateClient() {
         try {
-            print("Add Client Id!: ");
-            long id = scanner.nextLong();
-            print("Enter Client First Name: ");
-            String firstName = scanner.next();
-
-            print("Enter Client Last Name: ");
-            String lastName = scanner.next();
-
-            print("Enter client phone number: ");
-            String phoneNumber = scanner.next();
-            Client client = new Client(firstName, lastName, phoneNumber);
+            Client client = getClientData();
             this.clientService.updateClient(client);
             print("Client Update Completed!\n");
         } catch (Exception exception) {
@@ -357,17 +372,9 @@ public class Console {
 
     private void handleAddClient() {
         try {
-
-            print("Enter First Name: ");
-            String firstName = scanner.next();
-
-            print("Enter Last Name: ");
-            String lastName = scanner.next();
-
-            print("Enter Phone Number: ");
-            String phoneNumber = scanner.next();
-            Client client = new Client(firstName, lastName, phoneNumber);
+            Client client = getClientData();
             this.clientService.addClient(client);
+            print("Client Added!\n");
         } catch (InputMismatchException ime) {
             print("Wrong data type entered!\n");
             scanner.next();

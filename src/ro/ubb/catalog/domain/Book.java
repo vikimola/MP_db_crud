@@ -6,14 +6,17 @@ public class Book extends BaseEntity<Long> {
     private String publisher;
     private double price;
     private int stock;
-    public Book(String title, String author, String publisher, double price,
+    public Book(Long id, String title, String author, String publisher, double price,
                 int stock){
+        super(id);
         this.title = title;
         this.author = author;
         this.publisher = publisher;
         this.price = price;
         this.stock = stock;
     }
+
+
     public String getTitle() {
         return title;
     }
