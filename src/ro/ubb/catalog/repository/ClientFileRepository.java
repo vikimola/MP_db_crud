@@ -77,8 +77,6 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
                     } catch (NumberFormatException e ){
                         throw new ValidatorException("String not convertible to number.");
                     }
-
-
                 }
             }
         }

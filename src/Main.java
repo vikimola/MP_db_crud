@@ -11,9 +11,9 @@ import ro.ubb.catalog.repository.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        String bookFilePath = "src/ro/ubb/catalog/domain/book.xml";
-        String clientFilePath = "src/ro/ubb/catalog/domain/client.xml";
-        String purchaseFilePath = "src/ro/ubb/catalog/domain/purchase.xml";
+        String bookFilePath = "src/ro/ubb/catalog/domain/resources/book.xml";
+        String clientFilePath = "src/ro/ubb/catalog/domain/resources/client.xml";
+        String purchaseFilePath = "src/ro/ubb/catalog/domain/resources/purchase.xml";
 
 
         BookValidator bookValidator = new BookValidator();
