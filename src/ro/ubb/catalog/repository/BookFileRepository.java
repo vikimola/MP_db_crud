@@ -1,16 +1,22 @@
 package ro.ubb.catalog.repository;
 
+import org.w3c.dom.*;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import ro.ubb.catalog.domain.Book;
 import ro.ubb.catalog.domain.validators.Validator;
 import ro.ubb.catalog.domain.validators.ValidatorException;
-import javax.xml.parsers.DocumentBuilderFactory;
+
 import javax.xml.parsers.DocumentBuilder;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
-import java.io.File;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -39,35 +45,21 @@ public class BookFileRepository extends InMemoryRepository<Long, Book> {
         public void readXml() {
             try
             {
-                //creating a constructor of file class and parsing an XML file
                 Path path = Paths.get(filePath);
                 File file = new File(String.valueOf(path));
 
-                //an instance of factory that gives a document builder
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-
-                //an instance of builder to parse the specified xml file
                 DocumentBuilder db = dbf.newDocumentBuilder();
                 Document doc = db.parse(file);
                 doc.getDocumentElement().normalize();
-//                System.out.println("Root element: " + doc.getDocumentElement().getNodeName());
                 NodeList nodeList = doc.getElementsByTagName("book");
-                // nodeList is not iterable, so we are using for loop
 
                 for (int itr = 0; itr < nodeList.getLength(); itr++)
                 {
                     Node node = nodeList.item(itr);
-//                    System.out.println("\nNode Name: " + node.getNodeName());
-//                    System.out.println("\nitr: " + itr);
                     if (node.getNodeType() == Node.ELEMENT_NODE)
                     {
                         Element element = (Element) node;
-//                        System.out.println("Item ID: " + element.getAttribute("id"));
-//                        System.out.println("Name: " + element.getElementsByTagName("title").item(0).getTextContent());
-//                        System.out.println("Price: " + element.getElementsByTagName("author").item(0).getTextContent());
-//                        System.out.println("Price: " + element.getElementsByTagName("publisher").item(0).getTextContent());
-//                        System.out.println("Price: " + element.getElementsByTagName("price").item(0).getTextContent());
-//                        System.out.println("Price: " + element.getElementsByTagName("stock").item(0).getTextContent());
                         String title = element.getElementsByTagName("title").item(0).getTextContent();
                         String author = element.getElementsByTagName("author").item(0).getTextContent();
                         String publisher = element.getElementsByTagName("publisher").item(0).getTextContent();
@@ -114,7 +106,6 @@ public class BookFileRepository extends InMemoryRepository<Long, Book> {
                 int stock = Integer.parseInt(items.get(5));
 
                 Book book = new Book(id, title, author, publisher, price, stock);
-                book.setId(id);
 
                 try {
                     super.save(book);
@@ -127,10 +118,16 @@ public class BookFileRepository extends InMemoryRepository<Long, Book> {
         }
     }
 
+
+
+
+
+
+
     @Override
     public Optional<Book> save(Book entity) throws ValidatorException {
         Optional<Book> optional = super.save(entity);
-        if (optional.isPresent()) {
+        if (optional.isEmpty()) {
             return optional;
         }
         saveToFile(entity);
@@ -148,4 +145,6 @@ public class BookFileRepository extends InMemoryRepository<Long, Book> {
             e.printStackTrace();
         }
     }
+
+
 }

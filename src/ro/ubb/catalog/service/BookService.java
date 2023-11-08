@@ -17,7 +17,6 @@ public class BookService {
         this.bookValidator = bookValidator;
     }
     public void addBook(Book book) throws ValidatorException {
-        this.bookValidator.validate(book);
         this.bookFileRepository.save(book);
     }
 
@@ -34,7 +33,6 @@ public class BookService {
         bookFileRepository.delete(id);
     }
     public void updateBook(Book book) throws ValidatorException{
-        this.bookValidator.validate(book);
         this.bookFileRepository.update(book);
 
     }
