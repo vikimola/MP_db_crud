@@ -1,4 +1,4 @@
-package ro.ubb.catalog.domain;
+package ro.ubb.bookstore.domain;
 
 public class Book extends BaseEntity<Long> {
     private String title;
@@ -14,6 +14,8 @@ public class Book extends BaseEntity<Long> {
         this.publisher = publisher;
         this.price = price;
         this.stock = stock;
+    }
+    public Book(){
     }
 
 

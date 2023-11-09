@@ -1,4 +1,4 @@
-package ro.ubb.catalog.domain;
+package ro.ubb.bookstore.domain;
 
 
 import java.time.LocalDate;

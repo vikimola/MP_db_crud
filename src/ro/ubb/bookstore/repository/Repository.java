@@ -1,8 +1,9 @@
-package ro.ubb.catalog.repository;
+package ro.ubb.bookstore.repository;
 
-import ro.ubb.catalog.domain.BaseEntity;
-import ro.ubb.catalog.domain.validators.ValidatorException;
+import ro.ubb.bookstore.domain.BaseEntity;
+import ro.ubb.bookstore.domain.validators.ValidatorException;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 /**
@@ -21,13 +22,13 @@ public interface Repository<ID, T extends BaseEntity<ID>> {
      * @throws IllegalArgumentException
      *             if the given id is null.
      */
-    Optional<T> findOne(ID id);
+    Optional<T> findOne(ID id) throws SQLException;
 
     /**
      *
      * @return all entities.
      */
-    Iterable<T> findAll();
+    Iterable<T> findAll() throws SQLException;
 
     /**
      * Saves the given entity.
@@ -40,7 +41,7 @@ public interface Repository<ID, T extends BaseEntity<ID>> {
      * @throws ValidatorException
      *             if the entity is not valid.
      */
-    Optional<T> save(T entity) throws ValidatorException;
+    Optional<T> save(T entity) throws ValidatorException, SQLException;
 
     /**
      * Removes the entity with the given id.

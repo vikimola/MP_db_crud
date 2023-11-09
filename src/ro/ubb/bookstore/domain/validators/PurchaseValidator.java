@@ -1,11 +1,11 @@
-package ro.ubb.catalog.domain.validators;
+package ro.ubb.bookstore.domain.validators;
 
-import ro.ubb.catalog.domain.Book;
-import ro.ubb.catalog.domain.Purchase;
-import ro.ubb.catalog.repository.BookFileRepository;
-import ro.ubb.catalog.repository.ClientFileRepository;
-import ro.ubb.catalog.repository.Repository;
+import ro.ubb.bookstore.domain.Purchase;
+import ro.ubb.bookstore.repository.BookDatabaseRepository;
+import ro.ubb.bookstore.repository.ClientFileRepository;
+import ro.ubb.bookstore.repository.Repository;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 
@@ -13,7 +13,7 @@ public class PurchaseValidator implements Validator<Purchase>{
 
 
 
-    public void validate(Purchase purchase, BookFileRepository bookFileRepository, ClientFileRepository clientFileRepository) throws ValidatorException{
+    public void validate(Purchase purchase, BookDatabaseRepository bookFileRepository, ClientFileRepository clientFileRepository) throws ValidatorException, SQLException {
         if(purchase.getId() < 0){
             throw new ValidatorException("Purchase ID must  not be negative.");
         }

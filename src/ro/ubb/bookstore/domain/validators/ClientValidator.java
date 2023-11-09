@@ -1,8 +1,8 @@
-package ro.ubb.catalog.domain.validators;
+package ro.ubb.bookstore.domain.validators;
 
-import ro.ubb.catalog.domain.Client;
-import ro.ubb.catalog.domain.Purchase;
-import ro.ubb.catalog.repository.Repository;
+import ro.ubb.bookstore.domain.Client;
+import ro.ubb.bookstore.domain.Purchase;
+import ro.ubb.bookstore.repository.Repository;
 
 public class ClientValidator implements Validator<Client>{
     public void validate(Client client) throws ValidatorException{

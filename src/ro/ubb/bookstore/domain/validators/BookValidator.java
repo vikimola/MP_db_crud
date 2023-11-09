@@ -1,10 +1,8 @@
-package ro.ubb.catalog.domain.validators;
+package ro.ubb.bookstore.domain.validators;
 
-import ro.ubb.catalog.domain.Book;
-import ro.ubb.catalog.domain.Purchase;
-import ro.ubb.catalog.repository.Repository;
-
-import java.util.Objects;
+import ro.ubb.bookstore.domain.Book;
+import ro.ubb.bookstore.domain.Purchase;
+import ro.ubb.bookstore.repository.Repository;
 
 public class BookValidator implements Validator<Book> {
     public void validate(Book book) throws ValidatorException{

@@ -1,10 +1,13 @@
-package ro.ubb.catalog.domain;
+package ro.ubb.bookstore.domain;
 
 public class BaseEntity<ID> {
     private ID id;
 
     public BaseEntity(ID id) {
         this.id = id;
+    }
+
+    public BaseEntity() {
     }
 
     public ID getId() {
@@ -14,11 +17,6 @@ public class BaseEntity<ID> {
     public void setId(ID id) {
         this.id = id;
     }
-
-
-
-
-
 
 
     @Override

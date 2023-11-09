@@ -1,4 +1,4 @@
-package ro.ubb.catalog.domain;
+package ro.ubb.bookstore.domain;
 
 public class ClientSpendingDTO {
     public String clientName;

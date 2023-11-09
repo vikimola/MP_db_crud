@@ -1,9 +1,9 @@
-package ro.ubb.catalog.service;
+package ro.ubb.bookstore.service;
 
-import ro.ubb.catalog.domain.Client;
-import ro.ubb.catalog.domain.validators.ClientValidator;
-import ro.ubb.catalog.domain.validators.ValidatorException;
-import ro.ubb.catalog.repository.ClientFileRepository;
+import ro.ubb.bookstore.domain.Client;
+import ro.ubb.bookstore.domain.validators.ClientValidator;
+import ro.ubb.bookstore.domain.validators.ValidatorException;
+import ro.ubb.bookstore.repository.ClientFileRepository;
 
 import java.util.HashSet;
 import java.util.Optional;

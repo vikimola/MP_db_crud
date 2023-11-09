@@ -1,13 +1,13 @@
-package ro.ubb.catalog.userInterface;
-import ro.ubb.catalog.domain.*;
-import ro.ubb.catalog.domain.validators.ValidatorException;
-import ro.ubb.catalog.service.BookService;
-import ro.ubb.catalog.service.ClientService;
-import ro.ubb.catalog.service.PurchaseService;
+package ro.ubb.bookstore.userInterface;
+import ro.ubb.bookstore.domain.*;
+import ro.ubb.bookstore.service.BookService;
+import ro.ubb.bookstore.service.ClientService;
+import ro.ubb.bookstore.service.PurchaseService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Optional;
@@ -45,9 +45,9 @@ public class Console {
                 case 1 -> handleBookSubmenu();
                 case 2 -> handleClientSubmenu();
                 case 3 -> handlePurchases();
-                case 4 -> handleBookProfitability();
-                case 5 -> handleClientSpending();
-                //case 6 -> bookService.getAllBooks();
+//                case 4 -> handleBookProfitability();
+//                case 5 -> handleClientSpending();
+                case 4 -> bookService.getAllBooks();
                 case 0 -> {
                     return;
                 }
@@ -57,19 +57,19 @@ public class Console {
         }
     }
 
-    private void handleBookProfitability() {
-        for (BookProfitabilityDTO profit : purchaseService.getBookProfitability()) {
-            System.out.println(profit);
-        }
-        System.out.println("\n");
-    }
-
-    private void handleClientSpending() {
-        for (ClientSpendingDTO amount : purchaseService.getClientSpending()) {
-            System.out.println(amount);
-        }
-        System.out.println("\n");
-    }
+//    private void handleBookProfitability() {
+//        for (BookProfitabilityDTO profit : purchaseService.getBookProfitability()) {
+//            System.out.println(profit);
+//        }
+//        System.out.println("\n");
+//    }
+//
+//    private void handleClientSpending() {
+//        for (ClientSpendingDTO amount : purchaseService.getClientSpending()) {
+//            System.out.println(amount);
+//        }
+//        System.out.println("\n");
+//    }
 
     private void handlePurchases() throws Exception {
         while (true) {
@@ -155,7 +155,6 @@ public class Console {
         try {
             Purchase purchase = getPurchasedata();
             this.purchaseService.addPurchase(purchase);
-            print("Added purchase!\n");
         } catch (InputMismatchException ime) {
             print("Wrong data type entered!\n");
             scanner.next();
@@ -166,7 +165,7 @@ public class Console {
 
         }
     }
-    private void handleBookSubmenu() {
+    private void handleBookSubmenu() throws SQLException {
         while (true) {
             print("1. Add a new book ");
             print("2. Update a book ");
@@ -190,7 +189,7 @@ public class Console {
             }
         }
     }
-    private void handleShowAllBooks() {
+    private void handleShowAllBooks() throws SQLException {
         if (!this.bookService.getAllBooks().isEmpty()) {
             for (Book book :
                     this.bookService.getAllBooks()) {
@@ -200,7 +199,7 @@ public class Console {
             System.out.println("Couldn't find books.\n");
         }
     }
-    private void handleShowOneBook() {
+    private void handleShowOneBook() throws SQLException {
         print("Enter Book Id");
         long bookId = scanner.nextLong();
         Optional<Book> book = this.bookService.readOneBook(bookId);
@@ -249,7 +248,6 @@ public class Console {
         try {
             Book book = getBookdata();
             this.bookService.addBook(book);
-            print("Book added!\n");
         } catch (InputMismatchException ime) {
             print("Wrong data type entered!\n");
             scanner.next();
@@ -374,7 +372,6 @@ public class Console {
         try {
             Client client = getClientData();
             this.clientService.addClient(client);
-            print("Client Added!\n");
         } catch (InputMismatchException ime) {
             print("Wrong data type entered!\n");
             scanner.next();

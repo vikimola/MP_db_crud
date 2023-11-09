@@ -1,4 +1,4 @@
-package ro.ubb.catalog.domain.validators;
+package ro.ubb.bookstore.domain.validators;
 
 public class ValidatorException extends CatalogException {
     public ValidatorException(String message) {

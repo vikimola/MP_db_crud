@@ -1,32 +1,27 @@
-package ro.ubb.catalog.repository;
+package ro.ubb.bookstore.repository;
 
-import org.xml.sax.SAXException;
-import ro.ubb.catalog.domain.BaseEntity;
-import ro.ubb.catalog.domain.Book;
-import ro.ubb.catalog.domain.validators.Validator;
-import ro.ubb.catalog.domain.validators.ValidatorException;
+import ro.ubb.bookstore.domain.BaseEntity;
+import ro.ubb.bookstore.domain.validators.Validator;
+import ro.ubb.bookstore.domain.validators.ValidatorException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
 
-/**
- * @author radu.
- */
-public abstract class InMemoryRepository<ID, T extends BaseEntity<ID>> implements Repository<ID, T> {
+public class DatabaseRepository<ID, T extends BaseEntity<ID>> implements Repository<ID, T> {
 
-    private Map<ID, T> entities;
-    private Validator<T> validator;
+    private final Map<ID, T> entities;
+    private final Validator<T> validator;
 
-    public InMemoryRepository(Validator<T> validator) {
+    public DatabaseRepository(Validator<T> validator) {
         this.validator = validator;
         entities = new HashMap<>();
     }
 
     @Override
-    public Optional<T> findOne(ID id) {
+    public Optional<T> findOne(ID id) throws SQLException {
         if (id == null) {
             throw new IllegalArgumentException("id must not be null");
         }
@@ -34,17 +29,16 @@ public abstract class InMemoryRepository<ID, T extends BaseEntity<ID>> implement
     }
 
     @Override
-    public Iterable<T> findAll() {
-//        Set<T> allEntities = entities.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toSet());
-//        return allEntities;
+    public Iterable<T> findAll() throws SQLException {
         return new HashSet<>(entities.values());
     }
 
     @Override
-    public Optional<T> save(T entity) throws ValidatorException {
+    public Optional<T> save(T entity) throws ValidatorException, SQLException {
         if (entity == null) {
             throw new IllegalArgumentException("id must not be null");
         }
+        System.out.println(Optional.ofNullable(entities.putIfAbsent(entity.getId(), entity)));
         validator.validate(entity);
         return Optional.ofNullable(entities.putIfAbsent(entity.getId(), entity));
     }
@@ -65,5 +59,4 @@ public abstract class InMemoryRepository<ID, T extends BaseEntity<ID>> implement
         validator.validate(entity);
         return Optional.ofNullable(entities.computeIfPresent(entity.getId(), (k, v) -> entity));
     }
-
 }

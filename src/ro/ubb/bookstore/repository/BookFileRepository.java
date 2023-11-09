@@ -1,20 +1,12 @@
-package ro.ubb.catalog.repository;
+package ro.ubb.bookstore.repository;
 
 import org.w3c.dom.*;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import ro.ubb.catalog.domain.Book;
-import ro.ubb.catalog.domain.validators.Validator;
-import ro.ubb.catalog.domain.validators.ValidatorException;
+import ro.ubb.bookstore.domain.Book;
+import ro.ubb.bookstore.domain.validators.Validator;
+import ro.ubb.bookstore.domain.validators.ValidatorException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;

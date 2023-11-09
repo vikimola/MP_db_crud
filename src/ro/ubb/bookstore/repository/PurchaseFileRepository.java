@@ -1,20 +1,15 @@
-package ro.ubb.catalog.repository;
+package ro.ubb.bookstore.repository;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-import ro.ubb.catalog.domain.Book;
-import ro.ubb.catalog.domain.Client;
-import ro.ubb.catalog.domain.validators.ClientValidator;
-import ro.ubb.catalog.domain.validators.Validator;
-import ro.ubb.catalog.domain.validators.ValidatorException;
+import ro.ubb.bookstore.domain.Purchase;
+import ro.ubb.bookstore.domain.validators.Validator;
+import ro.ubb.bookstore.domain.validators.ValidatorException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -30,11 +26,10 @@ import java.util.Optional;
 /**
  * @author radu.
  */
-public class ClientFileRepository extends InMemoryRepository<Long, Client> {
+public class PurchaseFileRepository extends InMemoryRepository<Long, Purchase> {
     private final String filePath;
 
-
-    public ClientFileRepository(Validator<Client> validator, String filePath) {
+    public PurchaseFileRepository(Validator<Purchase> validator, String filePath) {
         super(validator);
         this.filePath = filePath;
 //        loadData();
@@ -44,8 +39,7 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
 
 
     public void readXml() {
-        try
-        {
+        try{
             Path path = Paths.get(filePath);
             File file = new File(String.valueOf(path));
 
@@ -54,7 +48,7 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(file);
             doc.getDocumentElement().normalize();
-            NodeList nodeList = doc.getElementsByTagName("client");
+            NodeList nodeList = doc.getElementsByTagName("purchase");
 
             for (int itr = 0; itr < nodeList.getLength(); itr++)
             {
@@ -62,17 +56,17 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
                 if (node.getNodeType() == Node.ELEMENT_NODE)
                 {
                     Element element = (Element) node;
-
-                    String firstName = element.getElementsByTagName("firstName").item(0).getTextContent();
-                    String lastName = element.getElementsByTagName("lastName").item(0).getTextContent();
-                    String phoneNumber = element.getElementsByTagName("phoneNumber").item(0).getTextContent();
-
                     try{
-                        Long id = Long.parseLong(element.getAttribute("id"));
-                        Client client = new Client(id, firstName, lastName, phoneNumber);
+                        long id = Long.parseLong(element.getAttribute("id"));
+                        long bookId = Long.parseLong(element.getElementsByTagName("bookId").item(0).getTextContent());
+                        long clientId = Long.parseLong(element.getElementsByTagName("clientId").item(0).getTextContent());
+                        int numberSold = Integer.parseInt(element.getElementsByTagName("numberSold").item(0).getTextContent());
+                        LocalDate dateOfPurchase = LocalDate.parse(element.getElementsByTagName("dateOfPurchase").item(0).getTextContent());
+
+                        Purchase purchase = new Purchase(id, bookId, clientId, numberSold, dateOfPurchase);
 
                         try {
-                            super.save(client);
+                            super.save(purchase);
                         } catch (ValidatorException e) {
                             e.printStackTrace();
                         }
@@ -80,6 +74,8 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
                     } catch (NumberFormatException e ){
                         throw new ValidatorException("String not convertible to number.");
                     }
+
+
                 }
             }
         }
@@ -97,15 +93,16 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
                 List<String> items = Arrays.asList(line.split(","));
 
                 Long id = Long.valueOf(items.get(0));
-                String firstName = items.get(1);
-                String lastName = items.get((2));
-                String phoneNumber = items.get((3));
+                long bookId = Long.parseLong(items.get(1));
+                long clientId = Long.parseLong(items.get(2));
+                int numberSold = Integer.parseInt(items.get(3));
+                LocalDate dateOfPurchase = LocalDate.parse(items.get(4));
 
-                Client client = new Client(id, firstName, lastName, phoneNumber);
-                client.setId(id);
+                Purchase purchase = new Purchase(id, bookId, clientId, numberSold, dateOfPurchase);
+//                purchase.setId(id);
 
                 try {
-                    super.save(client);
+                    super.save(purchase);
                 } catch (ValidatorException e) {
                     e.printStackTrace();
                 }
@@ -116,8 +113,8 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
     }
 
     @Override
-    public Optional<Client> save(Client entity) throws ValidatorException {
-        Optional<Client> optional = super.save(entity);
+    public Optional<Purchase> save(Purchase entity) throws ValidatorException {
+        Optional<Purchase> optional = super.save(entity);
         if (optional.isPresent()) {
             return optional;
         }
@@ -125,14 +122,12 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
         return Optional.empty();
     }
 
-
-
-    private void saveToFile(Client entity) {
+    private void saveToFile(Purchase entity) {
         Path path = Paths.get(filePath);
 
         try (BufferedWriter bufferedWriter = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
             bufferedWriter.write(
-                    entity.getId() + "," + entity.getFirstName() + "," + entity.getLastName() + "," + entity.getPhoneNumber());
+                    entity.getId() + "," + entity.getBookId() + "," + entity.getClientId() + "," + entity.getNumberSold() + "," + entity.getDateOfPurchase());
             bufferedWriter.newLine();
         } catch (IOException e) {
             e.printStackTrace();
