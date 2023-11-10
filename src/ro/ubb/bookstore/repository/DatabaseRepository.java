@@ -38,13 +38,12 @@ public class DatabaseRepository<ID, T extends BaseEntity<ID>> implements Reposit
         if (entity == null) {
             throw new IllegalArgumentException("id must not be null");
         }
-        System.out.println(Optional.ofNullable(entities.putIfAbsent(entity.getId(), entity)));
         validator.validate(entity);
         return Optional.ofNullable(entities.putIfAbsent(entity.getId(), entity));
     }
 
     @Override
-    public Optional<T> delete(ID id) {
+    public Optional<T> delete(ID id) throws SQLException {
         if (id == null) {
             throw new IllegalArgumentException("id must not be null");
         }
@@ -52,7 +51,7 @@ public class DatabaseRepository<ID, T extends BaseEntity<ID>> implements Reposit
     }
 
     @Override
-    public Optional<T> update(T entity) throws ValidatorException {
+    public Optional<T> update(T entity) throws ValidatorException, SQLException {
         if (entity == null) {
             throw new IllegalArgumentException("entity must not be null");
         }

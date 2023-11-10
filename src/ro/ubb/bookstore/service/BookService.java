@@ -28,11 +28,11 @@ public class BookService {
         this.bookDatabaseRepository.save(book);
     }
 
-    public void updateBook(Book book) throws ValidatorException{
+    public void updateBook(Book book) throws ValidatorException, SQLException {
         this.bookDatabaseRepository.update(book);
     }
 
-    public void deleteOneBook(Long id){
+    public void deleteOneBook(Long id) throws SQLException {
         this.bookDatabaseRepository.delete(id);
     }
 }

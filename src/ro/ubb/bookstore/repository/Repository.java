@@ -52,7 +52,7 @@ public interface Repository<ID, T extends BaseEntity<ID>> {
      * @throws IllegalArgumentException
      *             if the given id is null.
      */
-    Optional<T> delete(ID id);
+    Optional<T> delete(ID id) throws SQLException;
 
     /**
      * Updates the given entity.
@@ -66,5 +66,5 @@ public interface Repository<ID, T extends BaseEntity<ID>> {
      * @throws ValidatorException
      *             if the entity is not valid.
      */
-    Optional<T> update(T entity) throws ValidatorException;
+    Optional<T> update(T entity) throws ValidatorException, SQLException;
 }

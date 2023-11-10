@@ -21,6 +21,10 @@ public class BookDatabaseRepository extends DatabaseRepository<Long, Book> {
 
     @Override
     public Optional<Book> findOne(Long id) throws SQLException {
+        Optional<Book> optional = super.findOne(id);
+        if (optional.isPresent()) {
+            return optional;
+        }
         Connection connection = DriverManager.getConnection(jdbcURL, "postgres", "admin");
         String sqlString = "select * from book where (id=?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
@@ -103,21 +107,50 @@ public class BookDatabaseRepository extends DatabaseRepository<Long, Book> {
         preparedStatement.setString(4, entity.getPublisher());
         preparedStatement.setDouble(5, entity.getPrice());
         preparedStatement.setInt(6, entity.getStock());
+        preparedStatement.executeUpdate();
 
-        preparedStatement.executeLargeUpdate();
         connection.close();
 
         return Optional.empty();
 
     }
 
-//    @Override
-//    public Optional<T> delete(ID id) {
-//        return Optional.empty();
-//    }
-//
-//    @Override
-//    public Optional<T> update(T entity) throws ValidatorException {
-//        return Optional.empty();
-//    }
+    @Override
+    public Optional<Book> delete(Long id) throws SQLException {
+        Optional<Book> optional = super.delete(id);
+        if (optional.isPresent()) {
+            return optional;
+        }
+        Connection connection = DriverManager.getConnection(jdbcURL, "postgres", "admin");
+        String sqlString = "delete from book where (id=?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
+        preparedStatement.setLong(1, id);
+        preparedStatement.executeUpdate();
+        connection.close();
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Book> update(Book entity) throws ValidatorException, SQLException {
+        Optional<Book> optional = super.update(entity);
+        if (optional.isPresent()) {
+            return optional;
+        }
+
+        Connection connection = DriverManager.getConnection(jdbcURL, "postgres", "admin");
+
+        String sqlString = "update postgres.public.book set title=?, author=?, publisher=?, price=?, stock=? where id=?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
+        preparedStatement.setLong(6, entity.getId());
+        preparedStatement.setString(1, entity.getTitle());
+        preparedStatement.setString(2, entity.getAuthor());
+        preparedStatement.setString(3, entity.getPublisher());
+        preparedStatement.setDouble(4, entity.getPrice());
+        preparedStatement.setInt(5, entity.getStock());
+        preparedStatement.executeUpdate();
+
+        connection.close();
+        return Optional.empty();
+    }
 }
