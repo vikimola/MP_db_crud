@@ -93,7 +93,7 @@ public class Console {
             }
         }
     }
-    private void handleShowAllPurchases() {
+    private void handleShowAllPurchases() throws SQLException {
         if (!this.purchaseService.getAllPurchases().isEmpty()) {
             for (Purchase p :
                     this.purchaseService.getAllPurchases()) {
@@ -104,10 +104,11 @@ public class Console {
         }
 
     }
-    private void handleShowOnePurchase() {
+    private void handleShowOnePurchase() throws SQLException {
         print("Which purchase would you like to see? ");
-        Long id =scanner.nextLong();
-        Optional<Purchase> purchase = this.purchaseService.readOnePurchase(id);
+        Long bookId =scanner.nextLong();
+        Long clientId =scanner.nextLong();
+        Optional<Purchase> purchase = this.purchaseService.readOnePurchase(bookId, clientId);
         if (purchase.isEmpty()) {
             print("Couldn't find the purchase you searched for!\n");
         } else {
@@ -115,11 +116,13 @@ public class Console {
         }
 
     }
-    private void handleDeletePurchase() {
-        print("Give me the id of the purchase: ");
-        Long id = scanner.nextLong();
-        System.out.println(this.purchaseService.readOnePurchase(id) + " will be deleted!");
-        this.purchaseService.deleteOnePurchase(id);
+    private void handleDeletePurchase() throws SQLException {
+        print("Give me the id of book: ");
+        Long bookId =scanner.nextLong();
+        print("Give me the id of the client: ");
+        Long clientId =scanner.nextLong();
+        System.out.println(this.purchaseService.readOnePurchase(bookId, clientId) + " will be deleted!");
+        this.purchaseService.deleteOnePurchase(bookId, clientId);
         print("Purchase deleted.\n ");
     }
     private Purchase getPurchasedata() {
@@ -282,7 +285,7 @@ public class Console {
         }
     }
 
-    private void handleClientSubmenu() {
+    private void handleClientSubmenu() throws SQLException {
         while (true) {
             print("1. Add a new client ");
             print("2. Update a client ");
@@ -306,7 +309,7 @@ public class Console {
         }
     }
 
-    private void handleShowAllClients() {
+    private void handleShowAllClients() throws SQLException {
         if (!this.clientService.getAllClients().isEmpty()) {
             for (Client client :
                     this.clientService.getAllClients()) {
@@ -318,7 +321,7 @@ public class Console {
 
     }
 
-    private void handleShowOneClient() {
+    private void handleShowOneClient() throws SQLException {
         print("Enter Client Id");
         Long id = scanner.nextLong();
         Optional<Client> client = this.clientService.readOneClient(id);

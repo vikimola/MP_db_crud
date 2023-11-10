@@ -4,8 +4,8 @@ package ro.ubb.bookstore.domain;
 import java.time.LocalDate;
 
 public class Purchase extends BaseEntity<Long> {
-    private final long bookId;
-    private final long clientId;
+    private long bookId;
+    private  long clientId;
     private int numberSold;
     private LocalDate dateOfPurchase;
 
@@ -16,12 +16,21 @@ public class Purchase extends BaseEntity<Long> {
         this.numberSold = numberSold;
         this.dateOfPurchase = dateOfPurchase;
     }
+    public Purchase() {
+    }
     public long getBookId() {
         return bookId;
     }
 
+    public void setBookId(long bookId) {
+        this.bookId = bookId;
+    }
+
     public long getClientId() {
         return clientId;
+    }
+    public void setClientId(long clientId) {
+        this.clientId = clientId;
     }
 
     public int getNumberSold() {

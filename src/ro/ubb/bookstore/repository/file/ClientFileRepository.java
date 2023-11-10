@@ -1,4 +1,4 @@
-package ro.ubb.bookstore.repository;
+package ro.ubb.bookstore.repository.file;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

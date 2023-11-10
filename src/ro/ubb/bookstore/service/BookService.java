@@ -1,9 +1,8 @@
 package ro.ubb.bookstore.service;
 
 import ro.ubb.bookstore.domain.Book;
-import ro.ubb.bookstore.domain.validators.BookValidator;
 import ro.ubb.bookstore.domain.validators.ValidatorException;
-import ro.ubb.bookstore.repository.BookDatabaseRepository;
+import ro.ubb.bookstore.repository.database.BookDatabaseRepository;
 
 import java.sql.SQLException;
 import java.util.HashSet;

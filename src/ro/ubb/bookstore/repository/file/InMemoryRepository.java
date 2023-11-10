@@ -1,27 +1,27 @@
-package ro.ubb.bookstore.repository;
+package ro.ubb.bookstore.repository.file;
 
 import ro.ubb.bookstore.domain.BaseEntity;
 import ro.ubb.bookstore.domain.validators.Validator;
 import ro.ubb.bookstore.domain.validators.ValidatorException;
+import ro.ubb.bookstore.repository.Repository;
 
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
-public class DatabaseRepository<ID, T extends BaseEntity<ID>> implements Repository<ID, T> {
+/**
+ * @author radu.
+ */
+public abstract class InMemoryRepository<ID, T extends BaseEntity<ID>> implements Repository<ID, T> {
 
-    private final Map<ID, T> entities;
-    private final Validator<T> validator;
+    private Map<ID, T> entities;
+    private Validator<T> validator;
 
-    public DatabaseRepository(Validator<T> validator) {
+    public InMemoryRepository(Validator<T> validator) {
         this.validator = validator;
         entities = new HashMap<>();
     }
 
     @Override
-    public Optional<T> findOne(ID id) throws SQLException {
+    public Optional<T> findOne(ID id) {
         if (id == null) {
             throw new IllegalArgumentException("id must not be null");
         }
@@ -29,12 +29,14 @@ public class DatabaseRepository<ID, T extends BaseEntity<ID>> implements Reposit
     }
 
     @Override
-    public Iterable<T> findAll() throws SQLException {
+    public Iterable<T> findAll() {
+//        Set<T> allEntities = entities.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toSet());
+//        return allEntities;
         return new HashSet<>(entities.values());
     }
 
     @Override
-    public Optional<T> save(T entity) throws ValidatorException, SQLException {
+    public Optional<T> save(T entity) throws ValidatorException {
         if (entity == null) {
             throw new IllegalArgumentException("id must not be null");
         }
@@ -43,7 +45,7 @@ public class DatabaseRepository<ID, T extends BaseEntity<ID>> implements Reposit
     }
 
     @Override
-    public Optional<T> delete(ID id) throws SQLException {
+    public Optional<T> delete(ID id) {
         if (id == null) {
             throw new IllegalArgumentException("id must not be null");
         }
@@ -51,11 +53,12 @@ public class DatabaseRepository<ID, T extends BaseEntity<ID>> implements Reposit
     }
 
     @Override
-    public Optional<T> update(T entity) throws ValidatorException, SQLException {
+    public Optional<T> update(T entity) throws ValidatorException {
         if (entity == null) {
             throw new IllegalArgumentException("entity must not be null");
         }
         validator.validate(entity);
         return Optional.ofNullable(entities.computeIfPresent(entity.getId(), (k, v) -> entity));
     }
+
 }

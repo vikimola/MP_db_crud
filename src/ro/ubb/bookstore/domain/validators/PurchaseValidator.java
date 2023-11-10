@@ -1,8 +1,9 @@
 package ro.ubb.bookstore.domain.validators;
 
 import ro.ubb.bookstore.domain.Purchase;
-import ro.ubb.bookstore.repository.BookDatabaseRepository;
-import ro.ubb.bookstore.repository.ClientFileRepository;
+import ro.ubb.bookstore.repository.database.BookDatabaseRepository;
+import ro.ubb.bookstore.repository.database.ClientDatabaseRepository;
+import ro.ubb.bookstore.repository.file.ClientFileRepository;
 import ro.ubb.bookstore.repository.Repository;
 
 import java.sql.SQLException;
@@ -13,7 +14,7 @@ public class PurchaseValidator implements Validator<Purchase>{
 
 
 
-    public void validate(Purchase purchase, BookDatabaseRepository bookFileRepository, ClientFileRepository clientFileRepository) throws ValidatorException, SQLException {
+    public void validate(Purchase purchase, BookDatabaseRepository bookDatabaseRepository, ClientDatabaseRepository clientDatabaseRepository) throws ValidatorException, SQLException {
         if(purchase.getId() < 0){
             throw new ValidatorException("Purchase ID must  not be negative.");
         }
@@ -31,11 +32,11 @@ public class PurchaseValidator implements Validator<Purchase>{
             throw new ValidatorException("Date of purchase cannot be in the future.");
         }
 
-        if(bookFileRepository.findOne(purchase.getBookId()).isEmpty()){
+        if(bookDatabaseRepository.findOne(purchase.getBookId()).isEmpty()){
             throw new ValidatorException("Book Id does not exist.");
 
         }
-        if(clientFileRepository.findOne(purchase.getClientId()).isEmpty()){
+        if(clientDatabaseRepository.findOne(purchase.getClientId()).isEmpty()){
             throw new ValidatorException("Client Id does not exist.");
         }
 

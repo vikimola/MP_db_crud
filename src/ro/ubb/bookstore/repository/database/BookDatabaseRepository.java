@@ -1,8 +1,9 @@
-package ro.ubb.bookstore.repository;
+package ro.ubb.bookstore.repository.database;
 
 import ro.ubb.bookstore.domain.Book;
 import ro.ubb.bookstore.domain.validators.Validator;
 import ro.ubb.bookstore.domain.validators.ValidatorException;
+import ro.ubb.bookstore.repository.database.DatabaseRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class BookDatabaseRepository extends DatabaseRepository<Long, Book> {
         if (optional.isPresent()) {
             return optional;
         }
-        Connection connection = DriverManager.getConnection(jdbcURL, "postgres", "admin");
+        Connection connection = DriverManager.getConnection(jdbcURL, USER, PASSWORD);
         String sqlString = "select * from book where (id=?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
         preparedStatement.setLong(1, id);
@@ -60,7 +61,7 @@ public class BookDatabaseRepository extends DatabaseRepository<Long, Book> {
 
     @Override
     public List<Book> findAll() throws SQLException {
-        Connection connection = DriverManager.getConnection(jdbcURL, "postgres", "admin");
+        Connection connection = DriverManager.getConnection(jdbcURL, USER, PASSWORD);
         String sqlString = "select * from book";
         PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -96,7 +97,7 @@ public class BookDatabaseRepository extends DatabaseRepository<Long, Book> {
             return optional;
         }
 
-        Connection connection = DriverManager.getConnection(jdbcURL, "postgres", "admin");
+        Connection connection = DriverManager.getConnection(jdbcURL, USER, PASSWORD);
 
         String sqlString = "insert into postgres.public.book (id, title, author, publisher, price, stock) values (?,?,?,?,?,?)";
 
@@ -121,7 +122,7 @@ public class BookDatabaseRepository extends DatabaseRepository<Long, Book> {
         if (optional.isPresent()) {
             return optional;
         }
-        Connection connection = DriverManager.getConnection(jdbcURL, "postgres", "admin");
+        Connection connection = DriverManager.getConnection(jdbcURL, USER, PASSWORD);
         String sqlString = "delete from book where (id=?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
         preparedStatement.setLong(1, id);
@@ -137,7 +138,7 @@ public class BookDatabaseRepository extends DatabaseRepository<Long, Book> {
             return optional;
         }
 
-        Connection connection = DriverManager.getConnection(jdbcURL, "postgres", "admin");
+        Connection connection = DriverManager.getConnection(jdbcURL, USER, PASSWORD);
 
         String sqlString = "update postgres.public.book set title=?, author=?, publisher=?, price=?, stock=? where id=?";
 

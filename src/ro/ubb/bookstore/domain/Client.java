@@ -12,6 +12,8 @@ public class Client extends BaseEntity<Long> {
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
     }
+    public Client() {
+    }
 
     public String getFirstName() {
         return firstName;
