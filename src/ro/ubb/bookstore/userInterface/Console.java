@@ -45,9 +45,9 @@ public class Console {
                 case 1 -> handleBookSubmenu();
                 case 2 -> handleClientSubmenu();
                 case 3 -> handlePurchases();
-//                case 4 -> handleBookProfitability();
-//                case 5 -> handleClientSpending();
-                case 4 -> bookService.getAllBooks();
+                case 4 -> handleBookProfitability();
+                case 5 -> handleClientSpending();
+                case 6 -> bookService.getAllBooks();
                 case 0 -> {
                     return;
                 }
@@ -57,19 +57,19 @@ public class Console {
         }
     }
 
-//    private void handleBookProfitability() {
-//        for (BookProfitabilityDTO profit : purchaseService.getBookProfitability()) {
-//            System.out.println(profit);
-//        }
-//        System.out.println("\n");
-//    }
-//
-//    private void handleClientSpending() {
-//        for (ClientSpendingDTO amount : purchaseService.getClientSpending()) {
-//            System.out.println(amount);
-//        }
-//        System.out.println("\n");
-//    }
+    private void handleBookProfitability() throws SQLException {
+        for (BookProfitabilityDTO profit : purchaseService.getBookProfitability()) {
+            System.out.println(profit);
+        }
+        System.out.println("\n");
+    }
+
+    private void handleClientSpending() throws SQLException {
+        for (ClientSpendingDTO amount : purchaseService.getClientSpending()) {
+            System.out.println(amount);
+        }
+        System.out.println("\n");
+    }
 
     private void handlePurchases() throws Exception {
         while (true) {
@@ -106,9 +106,8 @@ public class Console {
     }
     private void handleShowOnePurchase() throws SQLException {
         print("Which purchase would you like to see? ");
-        Long bookId =scanner.nextLong();
-        Long clientId =scanner.nextLong();
-        Optional<Purchase> purchase = this.purchaseService.readOnePurchase(bookId, clientId);
+        Long id =scanner.nextLong();
+        Optional<Purchase> purchase = this.purchaseService.readOnePurchase(id);
         if (purchase.isEmpty()) {
             print("Couldn't find the purchase you searched for!\n");
         } else {
@@ -118,16 +117,13 @@ public class Console {
     }
     private void handleDeletePurchase() throws SQLException {
         print("Give me the id of book: ");
-        Long bookId =scanner.nextLong();
-        print("Give me the id of the client: ");
-        Long clientId =scanner.nextLong();
-        System.out.println(this.purchaseService.readOnePurchase(bookId, clientId) + " will be deleted!");
-        this.purchaseService.deleteOnePurchase(bookId, clientId);
+        Long  id =scanner.nextLong();
+        System.out.println(this.purchaseService.readOnePurchase(id) + " will be deleted!");
+        this.purchaseService.deleteOnePurchase(id);
         print("Purchase deleted.\n ");
     }
     private Purchase getPurchasedata() {
         InputStreamReader isr = new InputStreamReader(System.in);
-        BufferedReader br = new BufferedReader(isr);
         print("Enter Id");
         long id = scanner.nextLong();
         print("Enter Book Id");
@@ -175,6 +171,7 @@ public class Console {
             print("3. Delete a book ");
             print("4. Show a book ");
             print("5. Show all books ");
+            print("6. Show books by a certain title");
             print("0. Return to main menu!\n");
             int option = scanner.nextInt();
             switch (option) {
@@ -183,6 +180,7 @@ public class Console {
                 case 3 -> this.handleDeleteBook();
                 case 4 -> this.handleShowOneBook();
                 case 5 -> this.handleShowAllBooks();
+                case 6 -> this.handleShowBooksByTitle();
                 case 0 ->
                         {
                     return;}
@@ -192,6 +190,7 @@ public class Console {
             }
         }
     }
+
     private void handleShowAllBooks() throws SQLException {
         if (!this.bookService.getAllBooks().isEmpty()) {
             for (Book book :
@@ -211,7 +210,17 @@ public class Console {
         } else {
             System.out.println(book);
         }
+    }
 
+    private void handleShowBooksByTitle() throws SQLException {
+        print("Enter Book Title");
+        String bookTitle = scanner.next();
+        Optional<Book> book = this.bookService.readBookByTitle(bookTitle);
+        if (book.isEmpty()) {
+            System.out.println("Couldn't find the book you searched for!\n");
+        } else {
+            System.out.println(book);
+        }
     }
 
     private void handleDeleteBook() {

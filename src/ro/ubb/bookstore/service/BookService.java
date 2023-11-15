@@ -2,16 +2,15 @@ package ro.ubb.bookstore.service;
 
 import ro.ubb.bookstore.domain.Book;
 import ro.ubb.bookstore.domain.validators.ValidatorException;
+import ro.ubb.bookstore.repository.Repository;
 import ro.ubb.bookstore.repository.database.BookDatabaseRepository;
 
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class BookService {
-    private final BookDatabaseRepository bookDatabaseRepository;
-    public BookService(BookDatabaseRepository bookDatabaseRepository) {
+    private final Repository<Long, Book> bookDatabaseRepository;
+    public BookService(Repository<Long, Book> bookDatabaseRepository) {
         this.bookDatabaseRepository = bookDatabaseRepository;
     }
     public Set<Book> getAllBooks() throws ValidatorException, SQLException {
@@ -21,6 +20,16 @@ public class BookService {
     }
     public Optional<Book> readOneBook(Long id) throws ValidatorException, SQLException {
         return this.bookDatabaseRepository.findOne(id);
+    }
+    public Optional<Book> readBookByTitle(String title) throws ValidatorException, SQLException {
+        List<Book> bookListAll = (List<Book>) this.bookDatabaseRepository.findAll();
+        for (Book book : bookListAll) {
+            if (book.getTitle().equals(title)) {
+                return Optional.of(book);
+            }
+        }
+       return Optional.empty();
+
     }
 
     public void addBook(Book book) throws ValidatorException, SQLException {

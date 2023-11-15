@@ -1,3 +1,5 @@
+import ro.ubb.bookstore.domain.Book;
+import ro.ubb.bookstore.repository.Repository;
 import ro.ubb.bookstore.repository.database.BookDatabaseRepository;
 import ro.ubb.bookstore.repository.database.PurchaseDatabaseRepository;
 import ro.ubb.bookstore.repository.file.BookFileRepository;
@@ -20,7 +22,8 @@ public class Main {
 
         BookValidator bookValidator = new BookValidator();
         BookFileRepository bookFileRepository = new BookFileRepository(bookValidator, bookFilePath);
-        BookDatabaseRepository bookDatabaseRepository = new BookDatabaseRepository(bookValidator);
+//        BookDatabaseRepository bookDatabaseRepository = new BookDatabaseRepository(bookValidator);
+        Repository<Long, Book> bookDatabaseRepository = new BookDatabaseRepository(bookValidator);
         BookService bookService = new BookService(bookDatabaseRepository);
 
         ClientValidator clientValidator = new ClientValidator();
@@ -31,7 +34,7 @@ public class Main {
         PurchaseValidator purchaseValidator = new PurchaseValidator();
         PurchaseFileRepository purchaseFileRepository = new PurchaseFileRepository(purchaseValidator, purchaseFilePath);
         PurchaseDatabaseRepository purchaseDatabaseRepository = new PurchaseDatabaseRepository(purchaseValidator);
-        PurchaseService purchaseService = new PurchaseService(purchaseDatabaseRepository, bookDatabaseRepository, clientDatabaseRepository, purchaseValidator);
+        PurchaseService purchaseService = new PurchaseService(purchaseDatabaseRepository, (BookDatabaseRepository) bookDatabaseRepository, clientDatabaseRepository, purchaseValidator);
 
         Console console=new Console(clientService, bookService, purchaseService);
         console.runConsole();

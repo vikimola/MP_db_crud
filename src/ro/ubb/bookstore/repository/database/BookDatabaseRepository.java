@@ -54,9 +54,6 @@ public class BookDatabaseRepository extends DatabaseRepository<Long, Book> {
             connection.close();
             return Optional.empty();
         }
-
-
-
     }
 
     @Override

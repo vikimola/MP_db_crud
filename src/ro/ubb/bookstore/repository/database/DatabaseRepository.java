@@ -29,6 +29,16 @@ public class DatabaseRepository<ID, T extends BaseEntity<ID>> implements Reposit
         return Optional.ofNullable(entities.get(id));
     }
 
+    public Optional<T> findByTitle(String title) throws SQLException {
+        if (title == null) {
+            throw new IllegalArgumentException("title must not be null");
+        }
+        return Optional.ofNullable(entities.get(title));
+    }
+
+
+
+
     @Override
     public Iterable<T> findAll() throws SQLException {
         return new HashSet<>(entities.values());
