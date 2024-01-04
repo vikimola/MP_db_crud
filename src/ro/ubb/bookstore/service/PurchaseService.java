@@ -3,6 +3,7 @@ package ro.ubb.bookstore.service;
 import ro.ubb.bookstore.domain.*;
 import ro.ubb.bookstore.domain.validators.PurchaseValidator;
 import ro.ubb.bookstore.domain.validators.ValidatorException;
+import ro.ubb.bookstore.repository.Repository;
 import ro.ubb.bookstore.repository.database.BookDatabaseRepository;
 import ro.ubb.bookstore.repository.database.ClientDatabaseRepository;
 import ro.ubb.bookstore.repository.database.PurchaseDatabaseRepository;
@@ -11,47 +12,42 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class PurchaseService {
-    private final PurchaseDatabaseRepository purchaseDatabaseRepository;
-    private final BookDatabaseRepository bookDatabaseRepository;
-    private final ClientDatabaseRepository clientDatabaseRepository;
-    private final PurchaseValidator purchaseValidator;
+    private final Repository<Long, Purchase> purchaseRepository;
+    private final Repository<Long, Book> bookDatabaseRepository;
+    private final Repository<Long, Client> clientDatabaseRepository;
 
-    public PurchaseService(PurchaseDatabaseRepository purchaseDatabaseRepository, BookDatabaseRepository
-            bookDatabaseRepository, ClientDatabaseRepository clientDatabaseRepository, PurchaseValidator purchaseValidator) {
-        this.purchaseDatabaseRepository = purchaseDatabaseRepository;
+    public PurchaseService(Repository<Long, Purchase> purchaseDatabaseRepository, Repository<Long, Book>
+            bookDatabaseRepository, Repository<Long, Client> clientDatabaseRepository) {
+        this.purchaseRepository = purchaseDatabaseRepository;
         this.bookDatabaseRepository = bookDatabaseRepository;
         this.clientDatabaseRepository = clientDatabaseRepository;
-        this.purchaseValidator = purchaseValidator;
     }
 
     public void addPurchase(Purchase purchase) throws SQLException {
-        this.purchaseValidator.validate(purchase, bookDatabaseRepository, clientDatabaseRepository);
-        this.purchaseDatabaseRepository.save(purchase);
+        this.purchaseRepository.save(purchase);
     }
 
     public Set<Purchase> getAllPurchases() throws SQLException {
-        Set<Purchase> purchases = new HashSet<>();
-        purchaseDatabaseRepository.findAll().forEach(purchases::add);
-        return purchases;
+        return new HashSet<>((Collection) purchaseRepository.findAll());
     }
 
     public Optional<Purchase> readOnePurchase(Long id) throws ValidatorException, SQLException {
-        return this.purchaseDatabaseRepository.findOne(id);
+        return this.purchaseRepository.findOne(id);
     }
 
     public void deleteOnePurchase(Long id) throws SQLException {
-        purchaseDatabaseRepository.delete(id);
+        purchaseRepository.delete(id);
     }
 
     public void updatePurchase(Purchase purchase) throws ValidatorException, SQLException {
-        this.purchaseDatabaseRepository.update(purchase);
+        this.purchaseRepository.update(purchase);
     }
 
 
 
     public List<BookProfitabilityDTO> getBookProfitability() throws SQLException {
         Map<String, Double> profitability = new HashMap<>();
-        List<Purchase> purchaseList = purchaseDatabaseRepository.findAll();
+        List<Purchase> purchaseList = (List<Purchase>) purchaseRepository.findAll();
 
         for (Purchase purchase : purchaseList) {
             long bookId = purchase.getBookId();
@@ -76,15 +72,13 @@ public class PurchaseService {
     }
 
     public List<ClientSpendingDTO> getClientSpending() throws SQLException {
-        List<Purchase> purchaseList = purchaseDatabaseRepository.findAll();
+        List<Purchase> purchaseList = (List<Purchase>) purchaseRepository.findAll();
         Map<String, Double> spending = new HashMap<>();
 
         for (Purchase purchase : purchaseList) {
             long clientId = purchase.getClientId();
             long bookId = purchase.getBookId();
 
-//            String clientName="";
-//            double amount = 0.0;
 
             clientDatabaseRepository.findOne(clientId).ifPresent(client -> {
                String clientName = client.getFirstName() + " " + client.getLastName();

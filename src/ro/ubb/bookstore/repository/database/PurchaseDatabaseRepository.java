@@ -4,6 +4,7 @@ import ro.ubb.bookstore.domain.Book;
 import ro.ubb.bookstore.domain.Purchase;
 import ro.ubb.bookstore.domain.validators.Validator;
 import ro.ubb.bookstore.domain.validators.ValidatorException;
+import ro.ubb.bookstore.repository.Repository;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -11,23 +12,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class PurchaseDatabaseRepository extends DatabaseRepository<Long, Purchase> {
+public class PurchaseDatabaseRepository implements Repository<Long, Purchase> {
 
     private static final String USER = "postgres";
     private static final String PASSWORD = "admin";
     String jdbcURL = "jdbc:postgresql://localhost:5432/postgres";
 
-    public PurchaseDatabaseRepository(Validator<Purchase> validator) {
+    private static Validator<Purchase> validator;
 
-        super(validator);
+    public PurchaseDatabaseRepository(Validator<Purchase> validator) {
+        PurchaseDatabaseRepository.validator = validator;
     }
 
     @Override
     public Optional<Purchase> findOne(Long id) throws SQLException {
-        Optional<Purchase> optional = super.findOne(id);
-        if (optional.isPresent()) {
-            return optional;
-        }
+
         Connection connection = DriverManager.getConnection(jdbcURL, USER, PASSWORD);
         String sqlString = "select * from purchase where (id=?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
@@ -84,12 +83,7 @@ public class PurchaseDatabaseRepository extends DatabaseRepository<Long, Purchas
     }
 
     @Override
-    public Optional<Purchase> save(Purchase entity) throws ValidatorException, SQLException {
-
-        Optional<Purchase> optional = super.save(entity);
-        if (optional.isPresent()) {
-            return optional;
-        }
+    public Optional<Purchase> save(Purchase entity) throws SQLException {
 
         Connection connection = DriverManager.getConnection(jdbcURL, USER, PASSWORD);
 
@@ -111,10 +105,7 @@ public class PurchaseDatabaseRepository extends DatabaseRepository<Long, Purchas
 
     @Override
     public Optional<Purchase> delete(Long id) throws SQLException {
-        Optional<Purchase> optional = super.delete(id);
-        if (optional.isPresent()) {
-            return optional;
-        }
+
         Connection connection = DriverManager.getConnection(jdbcURL, USER, PASSWORD);
         String sqlString = "delete from purchase where (id=?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
@@ -126,10 +117,6 @@ public class PurchaseDatabaseRepository extends DatabaseRepository<Long, Purchas
 
     @Override
     public Optional<Purchase> update(Purchase entity) throws ValidatorException, SQLException {
-        Optional<Purchase> optional = super.update(entity);
-        if (optional.isPresent()) {
-            return optional;
-        }
 
         Connection connection = DriverManager.getConnection(jdbcURL, USER, PASSWORD);
 
